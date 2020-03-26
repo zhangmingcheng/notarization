@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export cur_dir=$(dirname BASH_SOURCE[0])
+export cur_dir=$(cd "$(dirname "$0")"; pwd)
 export root_dir=$(dirname $(cd $cur_dir && pwd))
 export script_dir=$root_dir/script
 
@@ -94,10 +94,11 @@ services:
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/$ca_priv_key_file_name
     ports:
       - "7054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.$org_domain-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/$ca_priv_key_file_name -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.$org_domain-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/$ca_priv_key_file_name -b admin:adminpw --cfg.affiliations.allowremove --cfg.identities.allowremove'
     volumes:
       - $peer_org_ca_dir:/etc/hyperledger/fabric-ca-server-config
-    container_name: ca_peer${org_domain%%.*}
+      - $root_dir/data/fabric-ca-server:/etc/hyperledger/fabric-ca-server
+    container_name: ca_peer_${org_domain%%.*}
     networks:
       - bcsf 
 EOF

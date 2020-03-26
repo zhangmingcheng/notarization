@@ -13,6 +13,12 @@ OrdererOrgs:
   - Name: Orderer
     Domain: gtbcsf.com
     EnableNodeOUs: true
+    CA:
+       Hostname: ca # implicitly ca.org1.example.com
+       Country: CN
+       Province: Fu Jian
+       Locality: Xia Men
+       #OrganizationalUnit: 
     # ---------------------------------------------------------------------------
     # "Specs" - See PeerOrgs below for complete description
     # ---------------------------------------------------------------------------
@@ -31,6 +37,12 @@ PeerOrgs:
   - Name: BankOrg
     Domain: bank.gtbcsf.com
     EnableNodeOUs: true
+    CA:
+       Hostname: ca # implicitly ca.org1.example.com
+       Country: CN
+       Province: Fu Jian
+       Locality: Xia Men
+       OrganizationalUnit: Bank
     # ---------------------------------------------------------------------------
     # "Specs"
     # ---------------------------------------------------------------------------
@@ -80,6 +92,12 @@ PeerOrgs:
   - Name: CourtOrg
     Domain: court.gtbcsf.com
     EnableNodeOUs: true
+    CA:
+       Hostname: ca # implicitly ca.org1.example.com
+       Country: CN
+       Province: Fu Jian
+       Locality: Xia Men
+       OrganizationalUnit: Court
     Specs:
         - Hostname: peer0
         - Hostname: peer1
@@ -89,6 +107,12 @@ PeerOrgs:
   - Name: NotaryOfficeOrg
     Domain: notary.gtbcsf.com
     EnableNodeOUs: true
+    CA:
+       Hostname: ca # implicitly ca.org1.example.com
+       Country: CN
+       Province: Fu Jian
+       Locality: Xia Men
+       OrganizationalUnit: Notary
     Specs:
         - Hostname: peer0
         - Hostname: peer1
@@ -98,6 +122,12 @@ PeerOrgs:
   - Name: OperationOrg
     Domain: operation.gtbcsf.com
     EnableNodeOUs: true
+    CA:
+       Hostname: ca # implicitly ca.org1.example.com
+       Country: CN
+       Province: Fu Jian
+       Locality: Xia Men
+       OrganizationalUnit: Operation Company
     Specs:
         - Hostname: peer0
         - Hostname: peer1

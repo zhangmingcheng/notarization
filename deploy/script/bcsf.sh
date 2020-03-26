@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cur_dir=$(dirname $BASH_SOURCE[0])
+cur_dir=$(cd "$(dirname "$0")"; pwd)
 script_dir=$(cd $cur_dir && pwd)
 root_dir=$(dirname $script_dir)
 artifacts_dir=$root_dir/config/channel-artifacts

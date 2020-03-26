@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cur_dir=$(dirname BASH_SOURCE[0])
+cur_dir=$(cd "$(dirname "$0")"; pwd)
 root_dir=$(dirname $(cd $cur_dir && pwd))
 
 echo "ROOT DIR: $root_dir"

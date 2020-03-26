@@ -1,6 +1,6 @@
 #!/bin/bash
 
-script_dir=$(dirname $BASH_SOURCE[0])
+script_dir=$(cd "$(dirname "$0")"; pwd)
 root_dir=$(dirname $(cd $script_dir && pwd))
 
 host_name=$1
@@ -37,3 +37,32 @@ export ORDERER_CONSENSUS_WALDIR=$root_dir/data/orderer/etcdraft/wal
 export ORDERER_CONSENSUS_SNAPDIR=$root_dir/data/orderer/etcdraft/snapshot
 
 nohup orderer > $root_dir/log/orderer.log 2>&1 &
+
+couchdb_yaml="$root_dir/config/docker-compose-couchdb.yaml"
+function genreate_couchdb_compose_file() {
+cat > $couchdb_yaml << EOF
+version: '2'
+
+networks:
+  couch:
+
+services:
+  couchdb:
+    container_name: couchdb
+    image: hyperledger/fabric-couchdb:latest
+    # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
+    # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
+    # for example map it to utilize Fauxton User Interface in dev environments.
+    ports:
+      - "5984:5984"
+    volumes:
+      - $root_dir/data/couchdb:/opt/couchdb/data
+    networks:
+      - couch
+EOF
+}
+genreate_couchdb_compose_file

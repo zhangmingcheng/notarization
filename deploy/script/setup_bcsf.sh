@@ -4,7 +4,7 @@
 #
 # usage: setup_bcsf.sh [username,remotehostIP,remotehostDir [username,remotehostIP,remotehostDir]...]
 
-cur_dir=$(dirname BASH_SOURCE[0])
+cur_dir=$(cd "$(dirname "$0")"; pwd)
 root_dir=$(dirname $(cd $cur_dir && pwd))
 config_dir=$root_dir/config
 crypto_config_dir=$config_dir/crypto-config

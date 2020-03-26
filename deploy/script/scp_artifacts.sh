@@ -9,7 +9,7 @@ if [[ $# != 3 ]]; then
     printHelp
 fi
 
-cur_dir=$(dirname $BASH_SOURCE[0])
+cur_dir=$(cd "$(dirname "$0")"; pwd)
 root_dir=$(dirname $(cd $cur_dir && pwd))
 
 script_dir=$root_dir/script
