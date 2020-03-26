@@ -1,0 +1,128 @@
+// 表名
+{
+	"notarization" // 公证书表
+	"reminder"	   // 催告表
+}
+
+//催告结构
+type Reminder struct {
+	string				`json:"Type"`				//类别，类似表名，区分大小写
+	string				`json:"DebtID"`				//债项编号
+	[]string			`json:"ReminderHashList"`	//催告记录、附件的哈希列表，包含短信记录、邮件记录、打电话录音、执行证书、附件的哈希
+}
+
+//公证书结构
+type Notarization struct {
+	string				`json:"Type"`				//类别，类似表名，区分大小写
+	string				`json:"NotaryMatter"`		//公证事项
+	string				`json:"NotaryInstitution"`	//公证单位
+	string				`json:"NotaryName"`	//公证员名称
+	string				`json:"NotarizationID"`		//公证书编号
+	string				`json:"NotarizationHash"`	//公证书hash值
+	string				`json:"NotarizationNO"`		//公证书号，如（2019）京中信电证字00665号
+	[]common.Subject	`json:"LitigantList"`	//当事人列表
+	[]string			`json:"ContentDocHashList"`	//申请公正的相关资料文件哈希列表，包含贷款合同、公证申请表、赋强公证效力告知书、电子询问笔录、送达地址确认书
+	string				`json:"CustomerID"`	//客户编号
+	string				`json:"CustomerName"`	//客户名称
+	string				`json:"MerchantID"`	//商户编号
+	string				`json:"MerchantName"`	//商户名称
+	string				`json:"DebtID"`	//债项编号
+	int64				`json:"AcceptDate"`	//受理时间
+	int64				`json:"NotarizationDate"`	//出证时间
+	int64				`json:"CreateDate"`	//创建时间
+	common.Subject		`json:"Debtor"`	// 借款人信息
+}
+
+// 借款人信息
+type Subject struct {
+	string	`json:"Name"`	//姓名
+	string	`json:"LegalityCertificateType"`	//有效证件类型
+	string	`json:"LegalityCertificateID"`		//有效证件号码
+	string	`json:"FixedTelephone,omitempty"`	//固定电话
+	string	`json:"MobilePhone,omitempty"`	//手机
+	string	`json:"EMail,omitempty"`	//电子邮箱
+	string	`json:"ContactAddress,omitempty"`	//常用或联系地址
+	string	`json:"Gender,omitempty"`	//性别
+}
+
+6. 催告记录、附件哈希上链
+描述：将短信记录、邮件记录、打电话录音、执行证书、附件的哈希，上链存证到区块链
+函数名：takeReminder
+参数：1个
+参数样例：
+{
+  "DebtID": "f",
+  "ReminderHashList": [
+    "d2",
+    "d2"
+  ],
+  "Type": "reminder"
+}
+
+
+5. 公证书上链
+描述：app端公证书生成时，公证书元数据、公证书hash、公证协议文件hash及贷款相关资料文件hash，上链存证到区块链
+函数名：takeNotarization
+参数：1个
+参数样例：
+{
+  "AcceptDate": 123,
+  "ContentDocHashList": [
+    "d1",
+    "d2"
+  ],
+  "CreateDate": 123,
+  "CustomerID": "a",
+  "CustomerName": "a",
+  "DebtID": "a",
+  "Debtor": {
+    "ContactAddress": "c",
+    "EMail": "c",
+    "FixedTelephone": "c",
+    "LegalityCertificateID": "c",
+    "LegalityCertificateType": "c",
+    "MobilePhone": "c",
+    "Name": "c"
+  },
+  "LitigantList": [],
+  "MerchantID": "a",
+  "MerchantName": "a",
+  "NotarizationDate": 123,
+  "NotarizationHash": "a",
+  "NotarizationID": "d",
+  "NotarizationNO": "a",
+  "NotaryInstitution": "a",
+  "NotaryMatter": "a",
+  "NotaryName": "a",
+  "Type": "notarization"
+}
+
+
+4. 符合条件的所有记录查询
+描述：以couchdb查询语句语法，返回多条记录集
+函数名：queryAll
+参数：1个
+参数1：couchdb查询语句，如：{"selector":{"owner":"oi"}}
+
+3. ID查询
+描述：通过表名和记录的唯一主键查询，返回单条记录或空"{}"
+函数名：queryByKey
+参数：2个
+参数1：表名
+参数2：ID(唯一主键)
+
+
+2. 分页查询
+描述：以couchdb查询语句语法，分页方式返回多条记录集
+函数名：queryWithPagination
+参数：3个
+参数1：couchdb查询语句，如：{"selector":{"owner":"oi"}}
+参数2：每页的记录条数
+参数3：分页标签，每次查询自动返回，下次查询用前一次返回的标签，第一次传空。
+
+1. 交易历史查询
+描述：通过表名和记录的唯一主键查询，返回记录的操作交易历史集
+函数名：queryTXChainForKey
+参数：2个
+参数1：表名
+参数2：ID(唯一主键)

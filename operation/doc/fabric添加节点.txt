@@ -1,0 +1,19 @@
+向已加入的组织中加入节点
+
+在进行如下操作前确保已经有脚本了
+
+步骤一：获取通道配置
+./channel.sh fetchall
+可以看到有如下输出：
+[channelCmd] InitCmdFactory -> INFO 001 Endorser and orderer connections initialized
+[cli.common] readBlock -> INFO 002 Received block: 0
+
+步骤二：节点加入通道
+./channel.sh joinchannel
+可以看到有如下输出：
+[channelCmd] InitCmdFactory -> INFO 001 Endorser and orderer connections initialized
+[channelCmd] executeJoin -> INFO 002 Successfully submitted proposal to join channel
+
+步骤三：查询节点是否已经加入通道
+./channel.sh
+[channelCmd] InitCmdFactory -> INFO 001 Endorser and orderer connections initialized

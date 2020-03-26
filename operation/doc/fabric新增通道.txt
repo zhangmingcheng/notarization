@@ -1,0 +1,39 @@
+已经运行的网络中创建和加入通道操作，主要有以下步骤。
+
+步骤一：创建通道配置交易
+export CHANNEL_NAME=newchl
+configtxgen -profile ThreeOrgsChannel -outputCreateChannelTx config/channel-artifacts/newchlchannel.tx -channelID $CHANNEL_NAME
+
+步骤二：创建锚点配置交易
+configtxgen -profile ThreeOrgsChannel -outputAnchorPeersUpdate config/channel-artifacts/FinanceMSP_newchlanchors.tx -channelID $CHANNEL_NAME -asOrg FinanceMSP
+
+configtxgen -profile ThreeOrgsChannel -outputAnchorPeersUpdate config/channel-artifacts/SupplierMSP_newchlanchors.tx -channelID $CHANNEL_NAME -asOrg SupplierMSP
+
+configtxgen -profile ThreeOrgsChannel -outputAnchorPeersUpdate config/channel-artifacts/CorenMSP_newchlanchors.tx -channelID $CHANNEL_NAME -asOrg CorenMSP
+
+步骤三：创建通道
+export CORE_PEER_MSPCONFIGPATH=crypto-config/peerOrganizations/finance.gtbcsf.com/users/Admin@finance.gtbcsf.com/msp
+export CORE_PEER_ADDRESS=peer0.finance.gtbcsf.com:7051
+export CORE_PEER_LOCALMSPID="FinanceMSP"
+export CORE_PEER_TLS_ROOTCERT_FILE=crypto-config/peerOrganizations/finance.gtbcsf.com/peers/peer0.finance.gtbcsf.com/tls/ca.crt
+peer channel create -o orderer2.gtbcsf.com:7050 -c newchl -f config/channel-artifacts/newchlchannel.tx --tls --cafile crypto-config/ordererOrganizations/gtbcsf.com/orderers/orderer2.gtbcsf.com/msp/tlscacerts/tlsca.gtbcsf.com-cert.pem
+
+步骤四：加入通道
+export CORE_PEER_MSPCONFIGPATH=crypto-config/peerOrganizations/supplier.gtbcsf.com/users/Admin@supplier.gtbcsf.com/msp
+export CORE_PEER_ADDRESS=peer0.supplier.gtbcsf.com:7051
+export CORE_PEER_LOCALMSPID=SupplierMSP
+export CORE_PEER_TLS_ENABLED=true
+export CORE_PEER_TLS_CERT_FILE=crypto-config/peerOrganizations/supplier.gtbcsf.com/peers/peer0.supplier.gtbcsf.com/tls/server.crt
+export CORE_PEER_TLS_KEY_FILE=crypto-config/peerOrganizations/supplier.gtbcsf.com/peers/peer0.supplier.gtbcsf.com/tls/server.key
+export CORE_PEER_TLS_ROOTCERT_FILE=crypto-config/peerOrganizations/supplier.gtbcsf.com/peers/peer0.supplier.gtbcsf.com/tls/ca.crt
+peer channel join -b config/channel-artifacts/newchl.block
+
+步骤五：更新锚节点
+export CORE_PEER_MSPCONFIGPATH=crypto-config/peerOrganizations/supplier.gtbcsf.com/users/Admin@supplier.gtbcsf.com/msp
+export CORE_PEER_ADDRESS=peer0.supplier.gtbcsf.com:7051
+export CORE_PEER_LOCALMSPID=SupplierMSP
+export CORE_PEER_TLS_ENABLED=true
+export CORE_PEER_TLS_CERT_FILE=crypto-config/peerOrganizations/supplier.gtbcsf.com/peers/peer0.supplier.gtbcsf.com/tls/server.crt
+export CORE_PEER_TLS_KEY_FILE=crypto-config/peerOrganizations/supplier.gtbcsf.com/peers/peer0.supplier.gtbcsf.com/tls/server.key
+export CORE_PEER_TLS_ROOTCERT_FILE=crypto-config/peerOrganizations/supplier.gtbcsf.com/peers/peer0.supplier.gtbcsf.com/tls/ca.crt
+peer channel update -o orderer3.gtbcsf.com:7050 -c newchl -f config/channel-artifacts/SupplierMSP_newchlanchors.tx --tls --cafile crypto-config/ordererOrganizations/gtbcsf.com/orderers/orderer3.gtbcsf.com/msp/tlscacerts/tlsca.gtbcsf.com-cert.pem
