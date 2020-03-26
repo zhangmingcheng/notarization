@@ -18,6 +18,7 @@ LOCAL_MSPs=(
     BankMSP
     NotaryOfficeMSP
     CourtMSP
+    OperationMSP
 )
 
 ORDERERHOSTNAMEs=(
@@ -33,6 +34,7 @@ ORDERERHOSTNAMEs=(
 DEFAULTREMOTEHOSTs=(
     "xuwenlong,49.4.28.111,/volume/fabric-run-env"
     "xuwenlong,114.115.171.33,/volume/fabric-run-env"
+    "xuwenlong,117.78.22.9,/home/xuwenlong/fabric-run-env"
 )
 
 # Ask user for confirmation to use default remote hosts 

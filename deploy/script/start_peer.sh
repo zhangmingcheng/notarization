@@ -14,6 +14,7 @@ fi
 BankMSP=(bank.gtbcsf.com peer0.bank.gtbcsf.com)
 CourtMSP=(court.gtbcsf.com peer0.court.gtbcsf.com)
 NotaryOfficeMSP=(notary.gtbcsf.com peer0.notary.gtbcsf.com)
+OperationMSP=(operation.gtbcsf.com peer0.operation.gtbcsf.com)
 peer_host_dns=$(eval echo '$'"{$local_msp[1]}")
 org_domain=$(eval echo '$'"{$local_msp[0]}")
 
@@ -23,7 +24,7 @@ export CORE_CHAINCODE_MODE=dev
 export CORE_VM_DOCKER_ATTACHSTDOUT=true
 export CORE_PEER_CHAINCODELISTENADDRESS=localhost:7052
 export CORE_PEER_NETWORKID=gxtybcsf
-export FABRIC_LOGGING_SPEC=DEBUG
+export FABRIC_LOGGING_SPEC=INFO
 export CORE_PEER_TLS_ENABLED=true
 export CORE_PEER_TLS_CERT_FILE=$root_dir/config/crypto-config/peerOrganizations/$org_domain/peers/$peer_host_dns/tls/server.crt
 export CORE_PEER_TLS_KEY_FILE=$root_dir/config/crypto-config/peerOrganizations/$org_domain/peers/$peer_host_dns/tls/server.key
@@ -131,6 +132,7 @@ channle_block_file=$root_dir/config/channel-artifacts/$channel_name.block
 DEFAULTREMOTEHOSTs=(
     "xuwenlong,49.4.28.111,/volume/fabric-run-env"
     "xuwenlong,114.115.171.33,/volume/fabric-run-env"
+    "xuwenlong,117.78.22.9,/home/xuwenlong/fabric-run-env"
 )
 
 function scpChannelBlocktoRemoteHosts() {
@@ -280,6 +282,7 @@ cat > ./$restart_script_name << EOF
 # ./bcsf.sh restart -o etcdraft -m NotaryOfficeMSP -n orderer3
 # ./bcsf.sh restart -o etcdraft -m BankMSP -n orderer2
 # ./bcsf.sh restart -o etcdraft -m CourtMSP -n orderer
+# ./bcsf.sh restart -o etcdraft -m OperationMSP -n orderer3
 
 ./bcsf.sh restart -o etcdraft -m $local_msp -n $orderer_host_name
 EOF

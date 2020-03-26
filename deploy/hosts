@@ -1,0 +1,26 @@
+127.0.0.1	localhost
+
+# The following lines are desirable for IPv6 capable hosts
+::1	localhost	ip6-localhost	ip6-loopback
+ff02::1	ip6-allnodes
+ff02::2	ip6-allrouters
+
+
+127.0.1.1	localhost.vm	localhost
+127.0.1.1	localhost	localhost
+127.0.1.1	ecs-ejj-dev-1	ecs-ejj-dev-1
+
+
+114.115.171.33  orderer.gtbcsf.com
+114.115.171.33  court.gtbcsf.com
+114.115.171.33  peer0.court.gtbcsf.com
+
+49.4.28.6       gtbcsf.com
+49.4.28.6       orderer2.gtbcsf.com
+49.4.28.6       bank.gtbcsf.com
+49.4.28.6       peer0.bank.gtbcsf.com
+
+49.4.28.111     orderer3.gtbcsf.com
+49.4.28.111     notary.gtbcsf.com
+49.4.28.111     peer0.notary.gtbcsf.com
+

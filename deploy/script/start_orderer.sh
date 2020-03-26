@@ -13,13 +13,11 @@ fi
 orderer=(orderer.gtbcsf.com)
 orderer2=(orderer2.gtbcsf.com)
 orderer3=(orderer3.gtbcsf.com)
-orderer4=(orderer4.gtbcsf.com)
-orderer5=(orderer5.gtbcsf.com)
 
 orderer_address_dns=$(eval echo '$'"{$host_name[0]}")
 
 export FABRIC_CFG_PATH=$root_dir/config
-export FABRIC_LOGGING_SPEC=DEBUG
+export FABRIC_LOGGING_SPEC=INFO
 export ORDERER_GENERAL_TLS_ENABLED=true
 export ORDERER_GENERAL_TLS_PRIVATEKEY=$root_dir/config/crypto-config/ordererOrganizations/gtbcsf.com/orderers/$orderer_address_dns/tls/server.key
 export ORDERER_GENERAL_TLS_CERTIFICATE=$root_dir/config/crypto-config/ordererOrganizations/gtbcsf.com/orderers/$orderer_address_dns/tls/server.crt

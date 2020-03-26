@@ -17,6 +17,7 @@ channle_block_file=/volume/fabric-run-env/config/channel-artifacts/sfchl.block
 DEFAULTREMOTEHOSTs=(
     "xuwenlong,49.4.28.111,/volume/fabric-run-env"
     "xuwenlong,114.115.171.33,/volume/fabric-run-env"
+    "xuwenlong,117.78.22.9,/home/xuwenlong/fabric-run-env"
 )
 
 function scpChannelBlocktoRemoteHosts() {

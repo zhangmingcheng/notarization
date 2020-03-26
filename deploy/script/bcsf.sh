@@ -11,6 +11,7 @@ del_flag_file=$crypto_config_dir/.del_flag
 BankMSP=(bank.gtbcsf.com peer0.bank.gtbcsf.com)
 CourtMSP=(court.gtbcsf.com peer0.court.gtbcsf.com)
 NotaryOfficeMSP=(notary.gtbcsf.com peer0.notary.gtbcsf.com)
+OperationMSP=(operation.gtbcsf.com peer0.operation.gtbcsf.com)
 
 export FABRIC_CFG_PATH=${root_dir}/config
 
@@ -166,7 +167,7 @@ function networkUp() {
   # generate artifacts if they don't exist
   if [ ! -d "$crypto_config_dir" ]; then
     generateCerts
-    copyOrgCACertstoFabricCA CourtMSP BankMSP NotaryOfficeMSP
+    copyOrgCACertstoFabricCA CourtMSP BankMSP NotaryOfficeMSP OperationMSP
     generateChannelArtifacts
   fi
 
@@ -267,10 +268,8 @@ function generateCerts() {
   if [ -d "$root_dir/config/crypto-config" ]; then
     rm -Rf $root_dir/config/crypto-config
   fi
-  set -x
   cryptogen generate --config=$root_dir/config/crypto-config.yaml --output=$root_dir/config/crypto-config
   res=$?
-  set +x
   if [ $res -ne 0 ]; then
     echo "Failed to generate certificates..."
     exit 1
@@ -289,10 +288,8 @@ function generateChannelConfiguration() {
   echo "#################################################################"
   echo "### Generating channel configuration transaction 'channel.tx' ###"
   echo "#################################################################"
-  set -x
   configtxgen -profile $channel_config -outputCreateChannelTx $artifacts_dir/channel.tx -channelID $CHANNEL_NAME
   res=$?
-  set +x
   if [ $res -ne 0 ]; then
     echo "Failed to generate channel configuration transaction..."
     exit 1
@@ -304,10 +301,8 @@ function generateChannelConfiguration() {
     echo "#################################################################"
     echo "#######   Generating anchor peer update for Org $org   ##########"
     echo "#################################################################"
-    set -x
     configtxgen -profile $channel_config -outputAnchorPeersUpdate $artifacts_dir/${org}_anchors.tx -channelID $CHANNEL_NAME -asOrg $org
     res=$?
-    set +x
     if [ $res -ne 0 ]; then
       echo "Failed to generate anchor peer update for Org1MSP..."
       exit 1
@@ -331,7 +326,6 @@ function generateChannelArtifacts() {
   # Note: For some unknown reason (at least for now) the block file can't be
   # named orderer.genesis.block or the orderer will fail to launch!
   echo "CONSENSUS_TYPE="$CONSENSUS_TYPE
-  set -x
   tx_opts="-channelID bcsf-sys-channel -outputBlock $artifacts_dir/genesis.block -configPath $root_dir/config"
   if [ "$CONSENSUS_TYPE" == "solo" ]; then
     configtxgen -profile SoloOrdererGenesis $tx_opts
@@ -340,12 +334,10 @@ function generateChannelArtifacts() {
   elif [ "$CONSENSUS_TYPE" == "etcdraft" ]; then
     configtxgen -profile EtcdRaftOrdererGenesis $tx_opts
   else
-    set +x
     echo "unrecognized CONSESUS_TYPE='$CONSENSUS_TYPE'. exiting"
     exit 1
   fi
   res=$?
-  set +x
   if [ $res -ne 0 ]; then
     echo "Failed to generate orderer genesis block..."
     exit 1
@@ -353,7 +345,7 @@ function generateChannelArtifacts() {
   if [ "$CONSENSUS_TYPE" == "solo" ]; then
     generateChannelConfiguration OneOrgChannel CourtMSP
   else
-    generateChannelConfiguration ThreeOrgsChannel CourtMSP BankMSP NotaryOfficeMSP
+    generateChannelConfiguration FourOrgsChannel CourtMSP BankMSP NotaryOfficeMSP OperationMSP
   fi
   echo
 }
@@ -467,7 +459,7 @@ elif [ "${MODE}" == "down" ]; then ## Clear the network
   networkDown
 elif [ "${MODE}" == "generate" ]; then ## Generate Artifacts
   generateCerts
-  copyOrgCACertstoFabricCA CourtMSP BankMSP NotaryOfficeMSP CompanyMSP CompMSP
+  copyOrgCACertstoFabricCA CourtMSP BankMSP NotaryOfficeMSP OperationMSP
   generateChannelArtifacts
 elif [ "${MODE}" == "restart" -o "${MODE}" == "cleanup" -o "${MODE}" == "deldataup" ]; then ## Restart the network
   networkDown

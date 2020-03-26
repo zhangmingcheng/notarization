@@ -69,6 +69,24 @@ Organizations:
             - Host: peer0.notary.gtbcsf.com
               Port: 7051
  
+    - &OperationOrg
+        Name: OperationMSP
+        ID: OperationMSP
+        MSPDir: crypto-config/peerOrganizations/operation.gtbcsf.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('OperationMSP.admin', 'OperationMSP.peer', 'OperationMSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('OperationMSP.admin', 'OperationMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('OperationMSP.admin')"
+        AnchorPeers:
+            - Host: peer0.operation.gtbcsf.com
+              Port: 7051
+ 
 Orderer: &OrdererDefaults
     OrdererType: solo
     Addresses:
@@ -213,6 +231,12 @@ Profiles:
                 - orderer.gtbcsf.com:7050
                 - orderer2.gtbcsf.com:7050
                 - orderer3.gtbcsf.com:7050
+
+            Organizations:
+            - *OrdererOrg
+            Capabilities:
+                <<: *OrdererCapabilities
+        Application:
             <<: *ApplicationDefaults
             Organizations:
             - <<: *OrdererOrg
@@ -222,6 +246,7 @@ Profiles:
                 - *BankOrg
                 - *NotaryOfficeOrg
                 - *CourtOrg
+                - *OperationOrg
 
     KafkaOrdererGenesis:
         <<: *ChannelDefaults
@@ -261,6 +286,19 @@ Profiles:
             SampleConsortium:
                 Organizations:
                     - *CourtOrg
+
+    FourOrgsChannel:
+        Consortium: SampleConsortium
+        <<: *ChannelDefaults
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *BankOrg
+                - *NotaryOfficeOrg
+                - *CourtOrg
+                - *OperationOrg
+            Capabilities:
+                <<: *ApplicationCapabilities
 
     ThreeOrgsChannel:
         Consortium: SampleConsortium

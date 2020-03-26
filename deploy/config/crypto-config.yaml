@@ -49,6 +49,8 @@ PeerOrgs:
     # ---------------------------------------------------------------------------
     Specs:
         - Hostname: peer0
+        - Hostname: peer1
+        - Hostname: peer2
     #   - Hostname: foo # implicitly "foo.org1.example.com"
     #     CommonName: foo27.org5.example.com # overrides Hostname-based FQDN set above
     #   - Hostname: bar
@@ -80,12 +82,25 @@ PeerOrgs:
     EnableNodeOUs: true
     Specs:
         - Hostname: peer0
+        - Hostname: peer1
+        - Hostname: peer2
     Users:
-       Count: 3
+      Count: 3
   - Name: NotaryOfficeOrg
     Domain: notary.gtbcsf.com
     EnableNodeOUs: true
     Specs:
         - Hostname: peer0
+        - Hostname: peer1
+        - Hostname: peer2
     Users:
-       ount: 3
+      Count: 3
+  - Name: OperationOrg
+    Domain: operation.gtbcsf.com
+    EnableNodeOUs: true
+    Specs:
+        - Hostname: peer0
+        - Hostname: peer1
+        - Hostname: peer2
+    Users:
+      Count: 3
